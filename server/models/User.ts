@@ -6,20 +6,25 @@ export interface IUser extends Document {
   password?: string;
   phone?: string;
   role: "user" | "admin" | "owner";
+  createdAt: Date;
+  updatedAt: Date;
 }
-const UserSchema = new Schema<IUser>({
-  name: { type: String, requireed: true, trim: true },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-    lowercase: true,
+const UserSchema = new Schema<IUser>(
+  {
+    name: { type: String, requireed: true, trim: true },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+    password: { type: String, required: true, minlength: 0 },
+    phone: { type: String, trim: true, minlength: 0 },
+    role: { type: String, enum: ["user", "admin", "owner"], default: "user" },
   },
-  password: { type: String, required: true, minlength: 0 },
-  phone: { type: String, trim: true, minlength: 0 },
-  role: { type: String, enum: ["user", "admin", "owner"], default: "user" },
-},{timestamps:true});
+  { timestamps: true },
+);
 
 UserSchema.set("toJSON", {
   transform: (doc, ret) => {
