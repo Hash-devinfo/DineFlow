@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Utensils, Upload, Image } from "lucide-react";
 import toast from "react-hot-toast";
-import { dummyRestaurant } from "../../assets/assets.ts";
+import api from "../../lib/api.ts";
 
 interface RestaurantWizardProps {
     setRestaurant: (restaurant: any) => void;
@@ -12,14 +12,14 @@ export default function RestaurantWizard({ setRestaurant }: RestaurantWizardProp
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [cuisine, setCuisine] = useState("");
-    const [priceRange, setPriceRange] = useState("$$");
+    const [priceRange, setPriceRange] = useState("RsRs");
     const [location, setLocation] = useState("");
     const [address, setAddress] = useState("");
     const [chef, setChef] = useState("");
     const [tags, setTags] = useState("");
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string>("");
-    const [availableSlots, setAvailableSlots] = useState<string[]>([
+    const [avaliableSlots, setAvaliableSlots] = useState<string[]>([
         "17:00",
         "17:30",
         "18:00",
@@ -51,10 +51,10 @@ export default function RestaurantWizard({ setRestaurant }: RestaurantWizardProp
     ];
 
     const toggleSlot = (slot: string) => {
-        if (availableSlots.includes(slot)) {
-            setAvailableSlots(availableSlots.filter((s) => s !== slot));
+        if (avaliableSlots.includes(slot)) {
+            setAvaliableSlots(avaliableSlots.filter((s) => s !== slot));
         } else {
-            setAvailableSlots([...availableSlots, slot].sort());
+            setAvaliableSlots([...avaliableSlots, slot].sort());
         }
     };
 
@@ -79,13 +79,13 @@ export default function RestaurantWizard({ setRestaurant }: RestaurantWizardProp
             formData.append("address", address);
             formData.append("chef", chef);
             formData.append("tags", tags);
-            formData.append("availableSlots", availableSlots.join(","));
+            formData.append("avaliableSlots", avaliableSlots.join(","));
             formData.append("totalSeats", totalSeats);
             if (imageFile) {
                 formData.append("image", imageFile);
             }
-
-            setRestaurant(dummyRestaurant[0]);
+            const res = await api.post('/owner/restaurant', formData);
+            setRestaurant(res.data);
             toast.success("Restaurant profile submitted successfully! Awaiting Admin approval.");
         } catch (error: any) {
             toast.error(error?.response?.data?.message || "Failed to register restaurant");
@@ -175,10 +175,10 @@ export default function RestaurantWizard({ setRestaurant }: RestaurantWizardProp
                             onChange={(e) => setPriceRange(e.target.value)}
                             className="w-full bg-surface-container-low/30 border border-outline-variant/40 px-3 py-2.5 text-xs focus:border-secondary focus:outline-none rounded-sm"
                         >
-                            <option value="$">$ (Casual)</option>
-                            <option value="$$">$$ (Moderate)</option>
-                            <option value="$$$">$$$ (Upscale)</option>
-                            <option value="$$$$">$$$$ (Fine Dining)</option>
+                            <option value="Rs">Rs (Casual)</option>
+                            <option value="RsRs">RsRs (Moderate)</option>
+                            <option value="RsRsRs">RsRsRs (Upscale)</option>
+                            <option value="RsRsRsRs">RsRsRsRs (Fine Dining)</option>
                         </select>
                     </div>
                     <div className="space-y-1">
@@ -247,7 +247,7 @@ export default function RestaurantWizard({ setRestaurant }: RestaurantWizardProp
                     <span className="block text-[10px] font-medium text-black/55 tracking-wider uppercase">Available Slots</span>
                     <div className="flex flex-wrap gap-2">
                         {defaultSlots.map((slot) => {
-                            const isSelected = availableSlots.includes(slot);
+                            const isSelected = avaliableSlots.includes(slot);
                             return (
                                 <button
                                     key={slot}

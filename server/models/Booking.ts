@@ -45,3 +45,4 @@ BookingSchema.pre("save", function () {
 });
 
 export const Booking = model<IBooking>("Booking", BookingSchema);
+  

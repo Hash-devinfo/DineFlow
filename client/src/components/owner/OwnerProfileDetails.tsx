@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { Upload, Image } from "lucide-react";
-import { dummyRestaurant } from "../../assets/assets.ts";
+import api from "../../lib/api.ts";
 
 interface OwnerProfileDetailsProps {
     restaurant: any;
@@ -93,7 +93,8 @@ export default function OwnerProfileDetails({ restaurant, setRestaurant }: Owner
             if (imageFile) {
                 formData.append("image", imageFile);
             }
-            setRestaurant(dummyRestaurant[0]);
+            const res= await api.put('/owner/restaurant', formData,)
+            setRestaurant(res.data);
             toast.success("Profile details updated successfully!");
         } catch (error: any) {
             toast.error(error?.response?.data?.message || "Update failed");
@@ -176,10 +177,10 @@ export default function OwnerProfileDetails({ restaurant, setRestaurant }: Owner
                             onChange={(e) => setPriceRange(e.target.value)}
                             className="w-full bg-surface-container-low/30 border border-outline-variant/40 px-3 py-2.5 text-xs focus:border-secondary focus:outline-none rounded-sm"
                         >
-                            <option value="$">$ (Casual)</option>
-                            <option value="$$">$$ (Moderate)</option>
-                            <option value="$$$">$$$ (Upscale)</option>
-                            <option value="$$$$">$$$$ (Fine Dining)</option>
+                            <option value="Rs">Rs (Casual)</option>
+                            <option value="RsRs">RsRs (Moderate)</option>
+                            <option value="RsRsRs">RsRsRs (Upscale)</option>
+                            <option value="RsRsRsRs">RsRsRsRs (Fine Dining)</option>
                         </select>
                     </div>
                     <div className="space-y-1">

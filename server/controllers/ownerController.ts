@@ -50,8 +50,8 @@ export const createOwnerRestaurant = async (
     const existing = await Restaurant.findOne({ owner: req.user?._id });
     if (existing) {
       res
-        .status(201)
-        .json({ message: "You already have a restaurant tegistered" });
+        .status(400)
+        .json({ message: "You already have a restaurant registered" });
       return;
     }
     const {
@@ -217,8 +217,8 @@ export const updateBookingStatus = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const { status } = req.body;
-    if (!status || !["confirmed", "cancelled", "compleated"].includes(status)) {
+    const { status } = req.body;  
+    if (!status || !["confirmed", "cancelled", "completed"].includes(status)) {
       res.status(400).json({ message: "Please enter a valid booking status" });
       return;
     }

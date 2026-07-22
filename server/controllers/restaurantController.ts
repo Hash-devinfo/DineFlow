@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Restaurant } from "../models/Restaurant.js";
-import { read } from "node:fs";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
 import { Booking } from "../models/Booking.js";
@@ -62,6 +61,7 @@ export const getFeaturedRestaurant = async (
       status: "approved",
       $or: [{ featured: true }, { exclusive: true }],
     });
+    res.json(featured);
   } catch (error: any) {
     console.error("Get Featured Restaurants Error", error);
     res.status(500).json({ message: "Server Error" });
@@ -98,8 +98,8 @@ export const getRestaurantBySlug = async (
           if (
             user &&
             (user.role === "admin" ||
-              (user.role === "owner" && restaurant.owner,
-              toString() === user._id.toString()))
+              (user.role === "owner" &&
+                restaurant.owner.toString() === user._id.toString()))
           ) {
             isAuthorized = true;
           }
@@ -139,8 +139,6 @@ export const getRestaurantAvaliability = async (
       return;
     }
     const bookingDate = new Date(date as string);
-
-    // Get all bookings on this date for rhe restaurant
     const bookings = await Booking.find({
       restaurant: restaurant._id,
       date: bookingDate,
