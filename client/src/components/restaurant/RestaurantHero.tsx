@@ -10,7 +10,7 @@ export default function RestaurantHero({ restaurant }: RestaurantHeroProps) {
     if (!restaurant) return null;
 
     return (
-        <section className="relative h-[480px] w-full overflow-hidden text-left animate-in fade-in duration-500">
+        <section className="relative h-120 w-full overflow-hidden text-left animate-in fade-in duration-500">
             <img src={restaurant.image} alt={restaurant.name} className="w-full h-full object-cover brightness-[0.7]" />
             <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent"></div>
 
