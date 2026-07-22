@@ -81,7 +81,7 @@ export default function Navbar() {
                                 <span className="size-7 rounded-full bg-secondary/20 border flex items-center justify-center text-xs uppercase">
                                     {user.name.charAt(0)}
                                 </span>
-                                <span className="max-w-[120px] truncate">{user.name.split(" ")[0]}</span>
+                                <span className="max-w-30 truncate">{user.name.split(" ")[0]}</span>
                             </button>
 
                             {/* Dropdown Menu */}

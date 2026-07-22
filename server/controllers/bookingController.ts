@@ -43,12 +43,13 @@ export const createBooking = async (
     });
     const bookedSeats = existingBooking.reduce((sum, b) => sum + b.guests, 0);
 
-    const totalSeats = restaurantId.totalSeats || 20;
+    const totalSeats = restraurant.totalSeats || 20;
     const avaliableSeats = totalSeats - bookedSeats;
     if (requestedGuests > avaliableSeats) {
       res.status(400).json({
         message: `unable to reserve. Only ${avaliableSeats} seats are avaliable for this time slot.`,
       });
+      return;
     }
     const booking = await Booking.create({
       user: req.user?._id,
@@ -100,7 +101,13 @@ export const cancelBooking = async (
   try {
     const booking = await Booking.findById(req.params.id);
     if (!booking) {
-      res.status(404).json({ message: "Booking nor found" });
+      res.status(404).json({ message: "Booking not found" });
+      return;
+    }
+    if (booking.user.toString() !== req.user?._id.toString()) {
+      res
+        .status(403)
+        .json({ message: "You are not authorized to cancel this booking" });
       return;
     }
     booking.status = "cancelled";
