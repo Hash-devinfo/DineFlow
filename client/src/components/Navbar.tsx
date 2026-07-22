@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAppContext } from "../context/AppContext.tsx";
 import { Menu, X, LogOut, LayoutDashboard, ShieldCheck } from "lucide-react";
+import logo from "../assets/logo.svg";
 
 export default function Navbar() {
     const { user, logout, setAuthModalOpen } = useAppContext();
@@ -44,7 +45,7 @@ export default function Navbar() {
                 {/* Logo */}
                 <div className="flex items-center gap-12">
                     <Link to="/">
-                        <img src="/logo.svg" alt="Logo" className={`h-8.5 ${scrolled || (location.pathname === "/" && "invert")}`} />
+                        <img src={logo} alt="Logo" className={`h-8.5 ${scrolled || (location.pathname === "/" && "invert")}`} />
                     </Link>
 
                     {/* Desktop Navigation Links */}
